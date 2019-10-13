@@ -1,0 +1,21 @@
+{
+  "name": "sketches",
+  "version": "1.0.0",
+  "description": "p5js (etc) web sketches",
+  "author": "Michael Paulukonis",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "nuxt": "^2.0.0",
+    "p5": "^0.9.0"
+  },
+  "devDependencies": {
+    "pug": "^2.0.4",
+    "pug-plain-loader": "^1.0.0"
+  }
+}
