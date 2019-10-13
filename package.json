@@ -22,7 +22,7 @@
     "clean": "rm -rf dist",
     "deploy": "gh-pages -d dist",
     "bump": "npm version patch",
-    "publish": "npm run bump && npm run generate && npm run deploy"
+    "publish": "DEPLOY_ENV=GH_PAGES npm run bump && npm run generate && npm run deploy"
   },
   "dependencies": {
     "nuxt": "^2.0.0",
