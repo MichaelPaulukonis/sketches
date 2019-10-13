@@ -6,7 +6,7 @@ const routerBase = process.env.DEPLOY_ENV === 'GH_PAGES' ? {
   }
 } : {}
 
-export default {
+const config =  {
   ...routerBase,
   mode: 'universal',
   /*
@@ -58,3 +58,7 @@ export default {
     }
   }
 }
+
+console.log(JSON.stringify(config))
+
+export default config
