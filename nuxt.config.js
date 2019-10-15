@@ -1,3 +1,4 @@
+const opn = require('opn')
 
 // only add `router.base = '/<repository-name>/'` if `DEPLOY_ENV` is `GH_PAGES`
 const routerBase = process.env.DEPLOY_ENV === 'GH_PAGES' ? {
@@ -47,6 +48,11 @@ const config =  {
   */
   modules: [
   ],
+  hooks: {
+    listen(server, { host, port }) {
+      opn(`http://${host}:${port}`)
+    }
+  },
   /*
   ** Build configuration
   */

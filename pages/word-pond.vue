@@ -20,6 +20,7 @@ export default {
       width: window.innerWidth,
       height: window.innerHeight
     }
+
     const builder = (p) => {
       new Sketch(p, P5, tm, size) // eslint-disable-line no-new
     }

@@ -6,17 +6,25 @@
     h2.subtitle
       | p5js (etc) web sketches
     .links
-      a.button--green(href='https://nuxtjs.org/' target='_blank')
-        | Documentation
-      a.button--grey(href='https://github.com/nuxt/nuxt.js' target='_blank')
-        | GitHub
+      template(v-for='item in items')
+        a.button--green(:href='item.path')
+          | {{item.name}}
 
 </template>
 
 <script>
 
 export default {
-  components: {
+  created () {
+    this.items = this.$router.options.routes.map(route => ({
+        name: route.name
+        , path: route.path
+    })).filter(route => route.name !== this.$route.name)
+  },
+  data () {
+    return {
+      items: []
+    }
   }
 }
 </script>
@@ -32,8 +40,8 @@ export default {
 }
 
 .title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   display: block;
   font-weight: 300;
   font-size: 100px;
