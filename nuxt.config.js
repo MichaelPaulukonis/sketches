@@ -1,11 +1,11 @@
 const opn = require('opn')
 
 // only add `router.base = '/<repository-name>/'` if `DEPLOY_ENV` is `GH_PAGES`
-const routerBase = process.env.DEPLOY_ENV === 'GH_PAGES' ? {
+const routerBase =  {
   router: {
-    base: '/sketches/'
+    base: process.env.DEPLOY_ENV === 'GH_PAGES' ? '/sketches/' : ''
   }
-} : {}
+}
 
 const config =  {
   ...routerBase,

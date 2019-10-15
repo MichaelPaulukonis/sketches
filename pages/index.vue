@@ -5,10 +5,10 @@
       | sketches
     h2.subtitle
       | p5js (etc) web sketches
-    .links
+    .links 
       template(v-for='item in items')
         a.button--green(:href='item.path')
-          | {{item.name}}
+          | {{ item.name }}
 
 </template>
 
@@ -17,8 +17,8 @@
 export default {
   created () {
     this.items = this.$router.options.routes.map(route => ({
-        name: route.name
-        , path: route.path
+      name: route.name
+      , path: (this.$router.options.base !== '/' ? this.$router.options.base : '') + route.path
     })).filter(route => route.name !== this.$route.name)
   },
   data () {
