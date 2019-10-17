@@ -11,7 +11,7 @@ export default function tumblrRandomPost () {
         debug: false
     }
     return new Promise((resolve, reject) => {
-        const apiUrl = "http://api.tumblr.com/v2/blog/" + settings.blogName + "/posts?api_key=" + settings.appKey
+        const apiUrl = "https://api.tumblr.com/v2/blog/" + settings.blogName + "/posts?api_key=" + settings.appKey
         axios.get(apiUrl)
             .then((response) => {
                 console.log(response)
