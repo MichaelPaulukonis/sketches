@@ -16,6 +16,11 @@ export default function Sketch (p5, tm, size) {
 
     let whereinstring = 0 // where in the L-system are we?
 
+    let pr = 0;
+    let pg = 10000;
+    let pb = 20000;
+    let pa = 30000;
+
     p5.setup = () => {
         const canvas = p5.createCanvas(710, 400)
         canvas.parent("p5Canvas");
@@ -42,6 +47,10 @@ export default function Sketch (p5, tm, size) {
         // wrap around at the end.
         whereinstring++
         if (whereinstring > thestring.length - 1) whereinstring = 0
+        pr += 0.01;
+        pg += 0.01;
+        pb += 0.01;
+        pa += 0.01;
     }
 
     // interpret an L-system
@@ -71,7 +80,6 @@ export default function Sketch (p5, tm, size) {
             // polar to cartesian based on step and currentangle:
             let x1 = x + step * p5.cos(p5.radians(currentangle))
             let y1 = y + step * p5.sin(p5.radians(currentangle))
-            // line(x, y, x1, y1); // connect the old and the new
 
             // update the turtle's position:
             x = x1
@@ -83,13 +91,17 @@ export default function Sketch (p5, tm, size) {
         }
 
         // give me some p5.random color values:
-        let r = Math.floor(p5.random(0, 255))
-        let g = Math.floor(p5.random(0, 255))
-        let b = Math.floor(p5.random(0, 255))
-        let a = Math.floor(p5.random(50, 100))
+        // let r = Math.floor(p5.random(0, 255))
+        // let g = Math.floor(p5.random(0, 255))
+        // let b = Math.floor(p5.random(0, 255))
+        // let a = Math.floor(p5.random(50, 100))
+        let r = Math.floor(p5.noise(pr) * 255)
+        let g = Math.floor(p5.noise(pg) * 255)
+        let b = Math.floor(p5.noise(pb) * 255)
+        let a = Math.floor(p5.noise(pa) * 100)
+
         // draw the stuff:
         p5.fill(r, g, b, a)
-        // ellipse(x, y, radius, radius);
         const c = tm.getWord()
         p5.text(c, x, y)
     }

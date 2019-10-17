@@ -19,18 +19,17 @@ export default function Sketch (p5, P5, t, size) {
         canvas.parent("p5Canvas");
         current = p5.createVector(0, 0);
         previous = p5.createVector(0, 0);
-        p5.colorMode(p5.HSB);
+        p5.colorMode(p5.HSB, cWidth, cHeight, 100, 1)
     }
 
     const getPos = () => ({
-        x: cWidth * p5.noise(px),
-        y: cHeight * p5.noise(py)
+        x: Math.floor(cWidth * p5.noise(px)),
+        y: Math.floor(cHeight * p5.noise(py))
     })
 
     p5.draw = () => {
         p5.background(0);
 
-        // TODO: random on/off
         const pp = p5.random()
         if (pp < 0.05 && !painting) {
             startPainting()
@@ -91,10 +90,7 @@ export default function Sketch (p5, P5, t, size) {
         const pos = getPos()
         previous.x = pos.x
         previous.y = pos.y
-        paths.push(new Path({
-            x: previous.x,
-            y: previous.y
-        }));
+        paths.push(new Path(pos));
     }
 
     // Stop
@@ -105,19 +101,17 @@ export default function Sketch (p5, P5, t, size) {
     // A Path is a list of particles
     class Path {
         constructor(position) {
+            // console.log(`new Path from: ${JSON.stringify(position)}`)
             this.particles = [];
             this.hue = p5.random(100);
-            this.color = {
-                x: p5.map(position.x, 0, cHeight, 0, 255),
-                y: p5.map(position.y, 0, cWidth, 0, 255)
-            }
             this.sizeChange = p5.random([0.995, 1.005, 0.99, 1.01, 0.995, 1.005, 0.99, 1.01, 0.95, 1.05])
             this.alignment = p5.random([p5.LEFT, p5.RIGHT, p5.CENTER])
+            this.position = position
         }
 
         add (position, force) {
             // Add a new particle with a position, force, and hue
-            this.particles.push(new Particle(position, force, this.hue, this.color, this.sizeChange, this.alignment));
+            this.particles.push(new Particle(position, force, this.hue, this.sizeChange, this.alignment));
         }
 
         // Display plath
@@ -145,14 +139,13 @@ export default function Sketch (p5, P5, t, size) {
 
     // Particles along the path
     class Particle {
-        constructor(position, force, hue, colr, sizeChange, alignment) {
+        constructor(position, force, hue, sizeChange, alignment) {
             this.position = p5.createVector(position.x, position.y);
             this.velocity = p5.createVector(force.x, force.y);
             this.drag = 0.95;
             this.sizeChange = sizeChange
             this.lifespan = 150;
             this.text = t.getWord()
-            this.color = colr
             this.size = p5.map(hue, 0, 100, 4, 64)
             this.alignment = alignment
         }
@@ -167,11 +160,9 @@ export default function Sketch (p5, P5, t, size) {
             this.lifespan--;
         }
 
-        // Draw particle and connect it with a line
-        // Draw a line to another
         display (other) {
-            p5.stroke(this.color.x, this.color.y, 100, p5.map(this.lifespan, 0, 255, 0, 1, true));
-            p5.fill(this.color.x, this.color.y, 100, p5.map(this.lifespan / 2, 0, 255, 0, 1, true));
+            p5.stroke(this.position.x, this.position.y, 100, p5.map(this.lifespan, 0, 255, 0, 1, true));
+            p5.fill(this.position.x, this.position.y, 100, p5.map(this.lifespan / 2, 0, 255, 0, 1, true));
             p5.textSize(this.size)
             p5.textAlign(this.alignment)
             p5.text(this.text, this.position.x, this.position.y);
