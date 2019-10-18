@@ -30,7 +30,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .page-index {
   background-image: linear-gradient(to bottom left, #973999, #f8598b, #f7bf00);
   background-attachment: fixed;

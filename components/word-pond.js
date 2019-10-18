@@ -1,3 +1,5 @@
+import tumblrRandomPost from './tumblr-random.js'
+
 export default function Sketch (p5, P5, t, size) {
 
     // All the paths
@@ -54,7 +56,7 @@ export default function Sketch (p5, P5, t, size) {
             current.y = pos.y
 
             // New particle's force is based on distance from previous
-            let force = P5.Vector.sub(current, previous);
+            let force = p5.static.Vector.sub(current, previous);
             force.mult(0.5);
 
             // Add new particle
@@ -109,6 +111,14 @@ export default function Sketch (p5, P5, t, size) {
     const stopPainting = () => {
         painting = false;
     }
+
+    p5.keyTyped = () => {
+        if (p5.key === 'r') {
+            tumblrRandomPost()
+                .then(poem => t.setText(poem))
+        }
+        return false
+      }
 
     // A Path is a list of particles
     class Path {
