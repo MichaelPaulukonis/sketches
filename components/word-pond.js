@@ -11,15 +11,21 @@ export default function Sketch (p5, P5, t, size) {
     let previous;
     let px = 0;
     let py = 10000;
-    const cWidth = size.width
-    const cHeight = size.height
+    let cWidth
+    let cHeight
 
     p5.setup = () => {
+        init()
         const canvas = p5.createCanvas(cWidth, cHeight);
         canvas.parent("p5Canvas");
+        p5.colorMode(p5.HSB, cWidth, cHeight, 100, 1)
         current = p5.createVector(0, 0);
         previous = p5.createVector(0, 0);
-        p5.colorMode(p5.HSB, cWidth, cHeight, 100, 1)
+    }
+
+    const init = () => {
+        cWidth = size.width
+        cHeight = size.height
     }
 
     const getPos = () => ({
@@ -31,10 +37,11 @@ export default function Sketch (p5, P5, t, size) {
         p5.background(0);
 
         const pp = p5.random()
-        if (pp < 0.05 && !painting) {
+        if (p5.millis() > next && pp < 0.04) {
+            // const len = paths[paths.length - 1] && paths[paths.length - 1].particles ? paths[paths.length - 1].particles.length : 0
+            // console.log(`starting a new, and killing path with length ${len}`)
             startPainting()
-        }
-        if (pp < 0.02 && painting) {
+        } else if (p5.millis() > next && pp < 0.02 && painting) {
             stopPainting()
         }
 
@@ -42,21 +49,18 @@ export default function Sketch (p5, P5, t, size) {
         if (p5.millis() > next && painting) {
             px += 0.01;
             py += 0.01;
-            // Grab mouse position      
-            // current.x = mouseX;
-            // current.y = mouseY;
             const pos = getPos()
             current.x = pos.x
             current.y = pos.y
 
-            // New particle's force is based on mouse movement
+            // New particle's force is based on distance from previous
             let force = P5.Vector.sub(current, previous);
             force.mult(0.5);
 
             // Add new particle
             paths[paths.length - 1].add(current, force);
 
-            // Schedule next circle
+            // Schedule next 
             next = p5.millis() + p5.random(100);
 
             // Store mouse values
@@ -72,6 +76,14 @@ export default function Sketch (p5, P5, t, size) {
             paths[i].update();
             paths[i].display();
         }
+    }
+
+    p5.windowResized = () => {
+        stopPainting()
+        size = { width: p5.windowWidth, height: p5.windowHeight }
+        p5.resizeCanvas(size.width, size.height)
+        init()
+        startPainting()
     }
 
     p5.mousePressed = () => {
@@ -148,6 +160,7 @@ export default function Sketch (p5, P5, t, size) {
             this.text = t.getWord()
             this.size = p5.map(hue, 0, 100, 4, 64)
             this.alignment = alignment
+            this.colorCoords = { ...position }
         }
 
         update () {
@@ -161,8 +174,11 @@ export default function Sketch (p5, P5, t, size) {
         }
 
         display (other) {
-            p5.stroke(this.position.x, this.position.y, 100, p5.map(this.lifespan, 0, 255, 0, 1, true));
-            p5.fill(this.position.x, this.position.y, 100, p5.map(this.lifespan / 2, 0, 255, 0, 1, true));
+            // stick to original location for all points on path, but..... modify a bit?
+            const lmod = p5.map(this.lifespan, 0, 255, 0, 1, true)
+            const lmod2 = p5.map(this.lifespan / 2, 0, 255, 0, 1, true)
+            p5.stroke(this.colorCoords.x, this.colorCoords.y + (lmod2 * 30), 100, lmod);
+            p5.fill(this.colorCoords.x + (lmod * 30), this.colorCoords.y, 100, lmod2);
             p5.textSize(this.size)
             p5.textAlign(this.alignment)
             p5.text(this.text, this.position.x, this.position.y);

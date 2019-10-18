@@ -14,7 +14,6 @@ export default function tumblrRandomPost () {
         const apiUrl = "https://api.tumblr.com/v2/blog/" + settings.blogName + "/posts?api_key=" + settings.appKey
         axios.get(apiUrl)
             .then((response) => {
-                console.log(response)
                 const rndPost = Math.floor(Math.random() * response.data.response.total_posts);
                 return rndPost
             }, (err) => {
