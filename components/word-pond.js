@@ -1,7 +1,5 @@
-import tumblrRandomPost from './tumblr-random.js'
-
-export default function Sketch (p5, P5, t, size) {
-
+export default function Sketch (config) {
+    let { p5Instance: p5, tm: t, size, randomPost } = config
     // All the paths
     let paths = [];
     // Are we painting?
@@ -20,7 +18,6 @@ export default function Sketch (p5, P5, t, size) {
         init()
         const canvas = p5.createCanvas(cWidth, cHeight);
         canvas.parent("p5Canvas");
-        p5.colorMode(p5.HSB, cWidth, cHeight, 100, 1)
         current = p5.createVector(0, 0);
         previous = p5.createVector(0, 0);
     }
@@ -28,6 +25,7 @@ export default function Sketch (p5, P5, t, size) {
     const init = () => {
         cWidth = size.width
         cHeight = size.height
+        p5.colorMode(p5.HSB, cWidth, cHeight, 100, 1)
     }
 
     const getPos = () => ({
@@ -114,11 +112,11 @@ export default function Sketch (p5, P5, t, size) {
 
     p5.keyTyped = () => {
         if (p5.key === 'r') {
-            tumblrRandomPost()
+            randomPost()
                 .then(poem => t.setText(poem))
         }
         return false
-      }
+    }
 
     // A Path is a list of particles
     class Path {
@@ -185,10 +183,12 @@ export default function Sketch (p5, P5, t, size) {
 
         display (other) {
             // stick to original location for all points on path, but..... modify a bit?
+            // const lmod = p5.map(this.lifespan, 0, 255, 0, 1, true).toFixed(3)
+            // const lmod2 = p5.map(this.lifespan / 2, 0, 255, 0, 1, true).toFixed(3)
             const lmod = p5.map(this.lifespan, 0, 255, 0, 1, true)
             const lmod2 = p5.map(this.lifespan / 2, 0, 255, 0, 1, true)
-            p5.stroke(this.colorCoords.x, this.colorCoords.y + (lmod2 * 30), 100, lmod);
-            p5.fill(this.colorCoords.x + (lmod * 30), this.colorCoords.y, 100, lmod2);
+            p5.stroke(this.colorCoords.x, this.colorCoords.y, 100, lmod);
+            p5.fill(this.colorCoords.x, this.colorCoords.y, 100, lmod2);
             p5.textSize(this.size)
             p5.textAlign(this.alignment)
             p5.text(this.text, this.position.x, this.position.y);

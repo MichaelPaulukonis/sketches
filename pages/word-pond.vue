@@ -5,10 +5,10 @@
 </template>
 
 <script>
-import Sketch from '../components/word-pond'
-import TextManager from '../components/text-manager'
-import text from '../components/poem.js'
-import tumblrRandomPost from '../components/tumblr-random.js'
+import Sketch from '@/components/word-pond'
+import TextManager from '@/assets/javascript/text-manager'
+import text from '@/assets/javascript/poem.js'
+import { default as randomPost } from '@/assets/javascript/tumblr-random.js'
 
 export default {
   components: {
@@ -21,13 +21,13 @@ export default {
       height: window.innerHeight
     }
 
-    tumblrRandomPost()
+    randomPost()
       .then(poem => {
         console.log(poem)
         const builder = (p5Instance) => {
           p5Instance.static = P5
           const tm = new TextManager(poem)
-          new Sketch(p5Instance, P5, tm, size) // eslint-disable-line no-new
+          new Sketch({ p5Instance, tm, size, randomPost }) // eslint-disable-line no-new
         }
         new P5(builder) // eslint-disable-line no-new
       })
@@ -37,7 +37,7 @@ export default {
         const builder = (p5Instance) => {
           p5Instance.static = P5
           const tm = new TextManager(text)
-          new Sketch(p5Instance, P5, tm, size) // eslint-disable-line no-new
+          new Sketch({ p5Instance, tm, size, randomPost }) // eslint-disable-line no-new
         }
         new P5(builder) // eslint-disable-line no-new
       })

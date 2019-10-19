@@ -6,7 +6,7 @@
 
 <script>
 import Sketch from '../components/lsystem'
-import TextManager from '../components/text-manager'
+import TextManager from '@/assets/javascript/text-manager'
 
 const pome = `I have eaten
 the plums
