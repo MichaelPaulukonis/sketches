@@ -7,14 +7,16 @@
 <script>
 import Sketch from '@/components/word-pond'
 import TextManager from '@/assets/javascript/text-manager'
-import text from '@/assets/javascript/poem.js'
-import { default as randomPost } from '@/assets/javascript/tumblr-random.js'
+import poem from '@/assets/javascript/poem.js'
+import randomPost from '@/assets/javascript/tumblr-random.js'
+
+const randElem = arr => arr[Math.floor(Math.random() * arr.length)]
 
 export default {
   components: {
   },
   mounted () {
-    const P5 = require('p5');
+    const P5 = require('p5')
 
     const size = {
       width: window.innerWidth,
@@ -22,26 +24,25 @@ export default {
     }
 
     randomPost()
-      .then(poem => {
-        console.log(poem)
+      .then((corpus) => {
         const builder = (p5Instance) => {
           p5Instance.static = P5
-          const tm = new TextManager(poem)
+          const text = randElem(corpus)
+          const tm = new TextManager({ text, corpus })
           new Sketch({ p5Instance, tm, size, randomPost }) // eslint-disable-line no-new
         }
         new P5(builder) // eslint-disable-line no-new
       })
-      .catch(err => {
+      .catch((err) => {
         console.log('OH NOES NO POEM!!!')
         console.error(err)
         const builder = (p5Instance) => {
           p5Instance.static = P5
-          const tm = new TextManager(text)
+          const tm = new TextManager({ text: poem, corpus: [poem] })
           new Sketch({ p5Instance, tm, size, randomPost }) // eslint-disable-line no-new
         }
         new P5(builder) // eslint-disable-line no-new
       })
-
   }
 }
 </script>
