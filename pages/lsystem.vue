@@ -28,7 +28,7 @@ export default {
   components: {
   },
   mounted () {
-    const P5 = require('p5');
+    const P5 = require('p5')
     const tm = new TextManager(pome)
 
     const size = {
@@ -38,7 +38,7 @@ export default {
 
     const builder = (p5Instance) => {
       p5Instance.static = P5
-      new Sketch(p5Instance, tm, size) // eslint-disable-line no-new
+      new Sketch({ p5: p5Instance, tm, size }) // eslint-disable-line no-new
     }
 
     new P5(builder) // eslint-disable-line no-new

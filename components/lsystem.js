@@ -1,11 +1,12 @@
-export default function Sketch (p5, tm, size) {
+export default function Sketch (config) {
+  const { p5, tm } = config
   // https://p5js.org/examples/simulate-l-systems.html
 
   // TURTLE STUFF:
   let x, y // the current position of the turtle
   let currentangle = 0 // which way the turtle is pointing
   const step = 20 // how much the turtle moves with each 'F'
-  const angle = 90 // how much the turtle turns with a '-' or '+'
+  const turn = 90 // how much the turtle turns with a '-' or '+'
 
   // LINDENMAYER STUFF (L-SYSTEMS)
   let thestring = 'A' // "axiom" or start of the string
@@ -80,18 +81,24 @@ export default function Sketch (p5, tm, size) {
 
   // this is a custom function that draws turtle commands
   function drawIt (k) {
+    const c = tm.getWord()
+    const ch = step
+    const cw = p5.textWidth(c)
+
     if (k === 'F') { // draw forward
       // polar to cartesian based on step and currentangle:
-      const x1 = x + step * p5.cos(p5.radians(currentangle))
-      const y1 = y + step * p5.sin(p5.radians(currentangle))
+      // const x1 = x + step * p5.cos(p5.radians(currentangle))
+      // const y1 = y + step * p5.sin(p5.radians(currentangle))
+      const x1 = x + cw * p5.cos(p5.radians(currentangle))
+      const y1 = y + ch * p5.sin(p5.radians(currentangle))
 
       // update the turtle's position:
       x = x1
       y = y1
     } else if (k === '+') {
-      currentangle += angle // turn left
+      currentangle += turn // turn left
     } else if (k === '-') {
-      currentangle -= angle // turn right
+      currentangle -= turn // turn right
     }
 
     // give me some p5.random color values:
@@ -106,7 +113,6 @@ export default function Sketch (p5, tm, size) {
 
     // draw the stuff:
     p5.fill(r, g, b, a)
-    const c = tm.getWord()
     p5.text(c, x, y)
   }
 }
