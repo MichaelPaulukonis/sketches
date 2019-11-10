@@ -10,22 +10,23 @@
         template(v-for='item in items')
           a.button--sketch(:href='item.path')
             | {{ item.name }}
-
+      h2#external
+        a.linkies(href='http://michaelpaulukonis.github.io') Return home
 </template>
 
 <script>
 
 export default {
-  created () {
-    this.items = this.$router.options.routes.map(route => ({
-      name: route.name
-      , path: (this.$router.options.base !== '/' ? this.$router.options.base : '') + route.path
-    })).filter(route => route.name !== this.$route.name)
-  },
   data () {
     return {
       items: []
     }
+  },
+  created () {
+    this.items = this.$router.options.routes.map(route => ({
+      name: route.name,
+      path: (this.$router.options.base !== '/' ? this.$router.options.base : '') + route.path
+    })).filter(route => route.name !== this.$route.name)
   }
 }
 </script>
@@ -58,7 +59,7 @@ export default {
 .subtitle {
   font-weight: 300;
   font-size: 42px;
-  color: #7d5cff;;
+  color: #7d5cff;
   word-spacing: 5px;
   padding-bottom: 15px;
 }
@@ -84,5 +85,28 @@ export default {
 .button--sketch:hover {
   color: #000;
   background-color: #38ef7d;
+}
+
+#external {
+  margin-top: 50px;
+}
+
+.linkies {
+  text-decoration: none;
+  display: inline-block;
+  padding-left: 20px;
+  padding: 2px 8px;
+  background: #38ef7d;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 400;
+  font-size: 14px;
+  color: #000;
+}
+
+.linkies:hover {
+  background: #96ebe1;
+  filter: invert(100%);
+  -webkit-filter: invert(100%);
 }
 </style>
