@@ -12,6 +12,9 @@ module.exports = {
     'plugin:nuxt/recommended',
     'p5js',
   ],
+  plugins: [
+    'vue'
+  ],
   // add your custom rules here
   rules: {
     "no-console": 'off'

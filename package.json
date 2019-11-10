@@ -23,8 +23,8 @@
     "deploy": "gh-pages -t -d dist",
     "bump": "npm version patch",
     "publish": "npm run bump && DEPLOY_ENV=GH_PAGES npm run generate && npm run deploy",
-    "lint:fix": "standard --fix",
-    "lint": "standard"
+    "lint:fix": "standard --fix --ext .js,.vue",
+    "lint": "standard --ext .js,.vue"
   },
   "dependencies": {
     "nuxt": "^2.0.0",
@@ -47,15 +47,6 @@
     "pug": "^2.0.4",
     "pug-plain-loader": "^1.0.0",
     "standard": "^14.3.1"
-  },
-  "standard": {
-    "ignore": [],
-    "extends": [
-      "p5js"
-    ],
-    "plugins": [],
-    "env": {},
-    "globals": []
   },
   "lint-staged": {
     "*.{js,vue}": "eslint"
