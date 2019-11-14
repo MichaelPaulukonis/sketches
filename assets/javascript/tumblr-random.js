@@ -7,7 +7,7 @@ const cleanup = text => text
   .replace(/\s/g, ' ')
   .replace(/–/g, '--')
 
-const tumblrRandomPost = () => {
+const tumblrRandomPost = ({ cleanText } = { cleanText: true }) => {
   const settings = {
     blogName: 'poeticalbot.tumblr.com',
     appKey: 'soMpL6oJLZq5ovoVYVzU5Qhx5DE87MMrxou6J7tGYLec6XeT6L',
@@ -27,7 +27,8 @@ const tumblrRandomPost = () => {
           .then((response) => {
             const newCorpus = response.data.response.posts.map((post) => {
               const body = cheerio.load(post.body)
-              return cleanup(body.text())
+              const text = cleanText ? cleanup(body.text()) : body.text()
+              return text
             })
             resolve(newCorpus)
           }))
