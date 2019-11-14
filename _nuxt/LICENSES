@@ -1,4 +1,18 @@
 /*!
+ * Determine if an object is a Buffer
+ *
+ * @author   Feross Aboukhadijeh <https://feross.org>
+ * @license  MIT
+ */
+
+/*!
+ * The buffer module from node.js, for the browser.
+ *
+ * @author   Feross Aboukhadijeh <feross@feross.org> <http://feross.org>
+ * @license  MIT
+ */
+
+/*!
  * The buffer module from node.js, for the browser.
  *
  * @author   Feross Aboukhadijeh <https://feross.org>
@@ -42,15 +56,13 @@
   */
 
 /*!
- * Determine if an object is a Buffer
+ * FitText-UMD
  *
- * @author   Feross Aboukhadijeh <https://feross.org>
- * @license  MIT
- */
-
-/*!
- * The buffer module from node.js, for the browser.
+ * Copyright 2011, Dave Rupert http://daverupert.com
+ * Released under the WTFPL license
+ * http://sam.zoy.org/wtfpl/
+ * Modified by Slawomir Kolodziej http://slawekk.info
+ * Modified by Peace Chen to support modules
  *
- * @author   Feross Aboukhadijeh <feross@feross.org> <http://feross.org>
- * @license  MIT
+ * Date: Tue Jan 12 2016 10:03:36 GMT-0600 (CST)
  */
