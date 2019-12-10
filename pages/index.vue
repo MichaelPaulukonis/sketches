@@ -6,9 +6,14 @@
         | sketches
       h2.subtitle
         | p5js (etc) web sketches
-      .links 
+      .links
         template(v-for='item in items')
-          a.button--sketch(:href='item.path')
+          a.button--sketch(
+              :href='item.path'
+              :title='item.description'
+              :target='item.external ? "_blank" : "_self"'
+              :rel='item.external ? "noopener" : ""'
+            )
             | {{ item.name }}
       h2#external
         a.linkies(href='http://michaelpaulukonis.github.io') Return home
@@ -18,15 +23,27 @@
 
 export default {
   data () {
+    const pathPrefix = this.$router.options.base !== '/' ? this.$router.options.base : ''
     return {
-      items: []
+      items: [
+        {
+          name: 'dragline',
+          path: `${pathPrefix}dragline`,
+          description: 'drag them around'
+        },
+        {
+          name: 'word-pond',
+          path: `${pathPrefix}word-pond`,
+          description: 'Flying words'
+        },
+        {
+          name: 'p5 sketches',
+          path: 'https://editor.p5js.org/MichaelPaulukonis/sketches',
+          external: true,
+          description: 'WIP sketches for p5js (many copied from others!!!)'
+        }
+      ]
     }
-  },
-  created () {
-    this.items = this.$router.options.routes.map(route => ({
-      name: route.name,
-      path: (this.$router.options.base !== '/' ? this.$router.options.base : '') + route.path
-    })).filter(route => route.name !== this.$route.name)
   }
 }
 </script>
