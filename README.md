@@ -1,6 +1,17 @@
 # sketches
 
-> p5js (etc) web sketches
+> p5js (etc) web sketches (published to github.io)
+
+
+## TODO
+
+- replace dragline / forward
+- add lsystem and text-fitter (why not)
+- redo sketch page maybe
+- add in Mona Lisa Block-Breaker
+- etc.
+- find a way to streamline
+- maybe not nuxt/vue
 
 ## Build Setup
 
