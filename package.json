@@ -24,7 +24,8 @@
     "bump": "npm version patch",
     "publish": "npm run bump && DEPLOY_ENV=GH_PAGES npm run generate && npm run deploy",
     "lint:fix": "eslint --fix --ext .js,.vue",
-    "lint": "eslint --ext .js,.vue"
+    "lint": "eslint --ext .js,.vue",
+    "prepare": "husky"
   },
   "dependencies": {
     "axios": "^1.7.7",
