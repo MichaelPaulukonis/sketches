@@ -20,21 +20,21 @@ const tumblrRandomPost = () => {
       .get(apiUrl)
       .then(
         // amazonq-ignore-next-line
-        response => {
+        (response) => {
           const rndPost = Math.floor(
             Math.random() * response.data.response.total_posts
           )
           return rndPost
         },
-        err => {
+        (err) => {
           reject(err)
         }
       )
       .then(postId =>
         axios
           .get(apiUrl + `&offset=${postId}&limit=${postCount}`)
-          .then(response => {
-            const newCorpus = response.data.response.posts.map(post => {
+          .then((response) => {
+            const newCorpus = response.data.response.posts.map((post) => {
               const parser = new DOMParser()
               const doc = parser.parseFromString(post.body, 'text/html')
               return cleanup(doc.body.textContent || '')

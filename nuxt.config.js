@@ -42,7 +42,7 @@ const config = {
   ** Nuxt.js dev-modules
   */
   buildModules: [
-    '@nuxtjs/eslint-module',
+    '@nuxtjs/eslint-module'
   ],
   /*
   ** Nuxt.js modules

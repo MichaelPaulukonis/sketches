@@ -21,11 +21,16 @@
 
 <script>
 export default {
-  data() {
+  data () {
     const pathPrefix = this.$router.options.base !== '/' ? this.$router.options.base : ''
 
     return {
       items: [
+        {
+          name: 'monalisa',
+          path: `${pathPrefix}monalisa-blockbreaker`,
+          description: 'the text fits! woo. uhm.....'
+        },
         {
           name: 'd r a g l i n e',
           external: true,
