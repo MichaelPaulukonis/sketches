@@ -332,8 +332,6 @@ export default function Sketch (config) {
     }
   }
 
-  // --- Helper functions defined within Sketch scope ---
-
   function processImage () {
     if (!sourceImage || blocks.length === 0 || gridCols <= 0 || gridRows <= 0) {
       console.warn(
@@ -450,7 +448,6 @@ export default function Sketch (config) {
   function createDynamicBlocks () {
     blocks = [] // Clear existing blocks
 
-    // Use p5.width/height for calculations
     const availableWidth = p5.width - 2 * marginHorizontal
     const availableHeight = p5.height - marginTop - marginBottom
 
@@ -463,7 +460,6 @@ export default function Sketch (config) {
     const blockAndGapWidth = desiredBlockSize + gap
     const blockAndGapHeight = desiredBlockSize + gap
 
-    // Use p5.floor
     gridCols = p5.floor((availableWidth + gap) / blockAndGapWidth)
     gridRows = p5.floor((availableHeight + gap) / blockAndGapHeight)
 
@@ -515,7 +511,7 @@ export default function Sketch (config) {
   function drawStartScreen () {
     p5.fill(255)
     p5.textSize(32)
-    p5.text('BLOCK BREAKER', p5.width / 2, p5.height / 3)
+    p5.text('MONA LISA\nBLOCK BREAKER', p5.width / 2, p5.height / 3)
 
     p5.textSize(16)
     p5.text('Controls:', p5.width / 2, p5.height / 2 - 40)
@@ -716,7 +712,7 @@ export default function Sketch (config) {
 
     switch (gameState) {
       case GAME_START:
-        drawGame() // Draw underlying game elements (paddle, ball placeholder)
+        // drawGame() // Draw underlying game elements (paddle, ball placeholder)
         drawStartScreen() // Overlay start screen text
         break
       case GAME_PLAYING:
