@@ -78,6 +78,7 @@ export default {
 .container {
   margin: 0 auto;
   min-height: 100vh;
+  max-width: 50vw;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -118,6 +119,7 @@ export default {
   text-decoration: none;
   padding: 10px 30px;
   margin-left: 15px;
+  margin-bottom: 15px;
 }
 
 .button--sketch:hover {
