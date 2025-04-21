@@ -27,7 +27,7 @@ export default {
     return {
       items: [
         {
-          name: 'monalisa',
+          name: 'monalisa blockbreaker',
           path: `${pathPrefix}monalisa-blockbreaker`,
           description: 'the text fits! woo. uhm.....'
         },
