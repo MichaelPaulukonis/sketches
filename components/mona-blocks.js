@@ -1,13 +1,14 @@
 // /Users/michaelpaulukonis/projects/sketches/components/mona-blocks.js
 export default function Sketch (config) {
   // Destructure p5 instance and potentially size from config
-  const { p5Instance: p5, size: initialSize, imageUrl } = config
+  const { p5Instance: p5, size: initialSize, imageUrl, soundUrls } = config
 
   // --- Sketch-scoped variables ---
   let paddle
   let ball
   let blocks = []
   let DEBUG = false
+  let useColor = false
 
   // Grid Layout Configuration (remains constant)
   const desiredBlockSize = 15
@@ -60,7 +61,7 @@ export default function Sketch (config) {
       this.active = true
       this.fillColor = p5.color(200) // Default fill
       this.strokeColor = p5.color(0)
-      this.color = p5.color(128) // Default color if image processing fails
+      this.color = p5.color(255) // Default color if image processing fails
     }
 
     draw () {
@@ -265,7 +266,9 @@ export default function Sketch (config) {
         // Ensure dy is pointing downwards, adjust based on angle if needed, but simple downward is fine
         // this.dy = this.speed * p5.cos(angle); // This would make it go up if angle is large
         score.launches++
-        // if (!sounds.mute && sounds.ballLaunch && sounds.ballLaunch.isLoaded()) sounds.ballLaunch.play();
+        if (!sounds.mute && sounds.ballLaunch && sounds.ballLaunch.isLoaded()) {
+          sounds.ballLaunch.play()
+        }
       }
     }
 
@@ -284,17 +287,23 @@ export default function Sketch (config) {
       if (this.x <= this.size / 2 || this.x >= p5.width - this.size / 2) {
         this.dx *= -1
         this.x = p5.constrain(this.x, this.size / 2, p5.width - this.size / 2) // Prevent sticking
-        // if (!sounds.mute && sounds.wallHit && sounds.wallHit.isLoaded()) sounds.wallHit.play();
+        if (!sounds.mute && sounds.wallHit && sounds.wallHit.isLoaded()) {
+          sounds.wallHit.play()
+        }
       }
       if (this.y <= this.size / 2) {
         this.dy *= -1
         this.y = this.size / 2 // Prevent sticking
-        // if (!sounds.mute && sounds.wallHit && sounds.wallHit.isLoaded()) sounds.wallHit.play();
+        if (!sounds.mute && sounds.wallHit && sounds.wallHit.isLoaded()) {
+          sounds.wallHit.play()
+        }
       }
 
       // Bottom screen check - reset ball if missed
       if (this.y >= p5.height) {
-        // if (!sounds.mute && sounds.ballMiss && sounds.ballMiss.isLoaded()) sounds.ballMiss.play();
+        if (!sounds.mute && sounds.ballMiss && sounds.ballMiss.isLoaded()) {
+          sounds.ballMiss.play()
+        }
         this.reset()
       }
 
@@ -319,7 +328,9 @@ export default function Sketch (config) {
           // Ensure ball doesn't get stuck in paddle - move it just above
           this.y = paddle.y - paddle.height / 2 - this.size / 2 - 0.1 // Small offset
 
-          // if (!sounds.mute && sounds.paddleHit && sounds.paddleHit.isLoaded()) sounds.paddleHit.play();
+          if (!sounds.mute && sounds.paddleHit && sounds.paddleHit.isLoaded()) {
+            sounds.paddleHit.play()
+          }
         }
       }
     }
@@ -498,7 +509,7 @@ export default function Sketch (config) {
     )
 
     // Process the image onto the newly created blocks if the image is loaded
-    if (sourceImage && sourceImage.width > 0) {
+    if (useColor && sourceImage && sourceImage.width > 0) {
       processImage()
     } else {
       console.log(
@@ -508,20 +519,50 @@ export default function Sketch (config) {
     }
   }
 
+  /**
+   * Draws the start screen with title, controls, and instructions.
+   * Uses a data structure for easier layout management.
+   */
   function drawStartScreen () {
-    p5.fill(255)
-    p5.textSize(32)
-    p5.text('MONA LISA\nBLOCK BREAKER', p5.width / 2, p5.height / 3)
+    const centerX = p5.width / 2
+    let currentY = p5.height / 5 // Initial Y position to start drawing from the top
 
-    p5.textSize(16)
-    p5.text('Controls:', p5.width / 2, p5.height / 2 - 40)
-    p5.text('← → Arrow Keys or Mouse to move', p5.width / 2, p5.height / 2)
-    p5.text('SPACE to launch ball', p5.width / 2, p5.height / 2 + 30)
-    p5.text('P to pause', p5.width / 2, p5.height / 2 + 60)
-    p5.text('M to mute/unmute', p5.width / 2, p5.height / 2 + 90)
+    // Define the text elements to display on the start screen
+    // Each object contains the text, its size, and the vertical space *after* it.
+    const screenContent = [
+      { text: 'MONA LISA\nBLOCK BREAKER', size: 32, spacingAfter: 50 }, // Title (multi-line handled)
+      { text: 'Controls:', size: 18, spacingAfter: 15 }, // Controls header
+      { text: '← → Arrow Keys or Mouse to move', size: 16, spacingAfter: 8 },
+      { text: 'SPACE to launch ball', size: 16, spacingAfter: 8 },
+      { text: 'P to pause', size: 16, spacingAfter: 8 },
+      { text: 'M to mute/unmute', size: 16, spacingAfter: 8 },
+      { text: 'C to toggle color', size: 16, spacingAfter: 8 },
+      { text: 'D for debug info', size: 16, spacingAfter: 8 },
+      { text: 'Press SPACE to start', size: 20, spacingAfter: 0, marginTop: 50 } // Call to action (extra margin before)
+    ]
 
-    p5.textSize(20)
-    p5.text('Press SPACE to start', p5.width / 2, (p5.height * 3) / 4)
+    p5.fill(255) // Set text color
+    p5.textAlign(p5.CENTER, p5.TOP) // Align text centrally horizontally, top edge at Y
+
+    // Loop through the content and draw each item
+    for (const item of screenContent) {
+      // Add extra margin before this item if specified
+      if (item.marginTop) {
+        currentY += item.marginTop
+      }
+
+      p5.textSize(item.size)
+      p5.text(item.text, centerX, currentY)
+
+      // Calculate the height of the text just drawn (handles multi-line)
+      // Using textAscent/Descent is more accurate than just textSize
+      const lines = item.text.split('\n').length
+      const textHeight = (p5.textAscent() + p5.textDescent()) * lines
+
+      currentY += textHeight + item.spacingAfter
+    }
+
+    p5.textAlign(p5.CENTER, p5.CENTER)
   }
 
   function drawPauseScreen () {
@@ -665,22 +706,46 @@ export default function Sketch (config) {
     ball.reset() // Position ball correctly
   }
 
-  // --- p5 lifecycle functions assigned to p5 instance ---
-
   p5.preload = () => {
-    // Use p5.loadImage / p5.loadSound
-    // Ensure paths are correct relative to where the sketch/assets are served
+    const soundLoaded = name => _ => console.log(`${name} loaded successfully`)
+    const soundError = name => err =>
+      console.error(`Failed to load ${name} sound:`, err)
     try {
       sourceImage = p5.loadImage(
         imageUrl,
         _ => console.log('Image loaded successfully in preload'),
         err => console.error('Failed to load image:', err)
       )
-      // sounds.blockHit = p5.loadSound('@/assets/mon-blocks/704260__baggonotes__mug_tap.wav',
-      //     sound => { console.log("Block hit sound loaded"); },
-      //     err => { console.error("Failed to load block hit sound:", err); }
-      // );
-      // Load other sounds here if needed
+      sounds.blockHit = p5.loadSound(
+        soundUrls.blockHit,
+        soundLoaded('blockHit'),
+        soundError('blockHit')
+      )
+      sounds.paddleHit = p5.loadSound(
+        soundUrls.paddleHit,
+        soundLoaded('paddleHit'),
+        soundError('paddleHit')
+      )
+      sounds.ballMiss = p5.loadSound(
+        soundUrls.ballMiss,
+        soundLoaded('ballMiss'),
+        soundError('ballMiss')
+      )
+      sounds.ballLaunch = p5.loadSound(
+        soundUrls.ballLaunch,
+        soundLoaded('ballLaunch'),
+        soundError('ballLaunch')
+      )
+      sounds.wallHit = p5.loadSound(
+        soundUrls.wallHit,
+        soundLoaded('wallHit'),
+        soundError('wallHit')
+      )
+      sounds.gameStart = p5.loadSound(
+        soundUrls.gameStart,
+        soundLoaded('gameStart'),
+        soundError('gameStart')
+      )
     } catch (error) {
       console.error('Error during preload:', error)
     }
@@ -739,13 +804,20 @@ export default function Sketch (config) {
     } else if (p5.key === 'd') {
       DEBUG = !DEBUG
       console.log('DEBUG toggled:', DEBUG)
+    } else if (p5.key === 'c') {
+      useColor = !useColor
+      resetGame() // Reset game to apply color changes
+    } else if (p5.key === 'r') {
+      resetGame()
     }
 
     switch (gameState) {
       case GAME_START:
         if (p5.key === ' ') {
           gameState = GAME_PLAYING
-          // Don't launch ball immediately, wait for another space press
+          if (!sounds.mute && sounds.gameStart && sounds.gameStart.isLoaded()) {
+            sounds.gameStart.play()
+          }
         }
         break
 

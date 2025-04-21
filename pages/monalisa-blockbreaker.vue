@@ -4,13 +4,22 @@
 </template>
 
 <script>
-// import p5 from 'p5'
 import MonaBlocksSketch from '@/components/mona-blocks.js'
 
 // --- Resolve the image path ---
 // Nuxt 2 / Webpack: Use require()
 const imageUrl = require('@/assets/mona-blocks/mona-lisa-768x1000.png')
-console.log(imageUrl)
+const soundUrls = {
+  blockHit: require('@/assets/mona-blocks/704260__baggonotes__mug_tap.wav').default,
+  paddleHit: require('@/assets/mona-blocks/523702__postrobcore__quick-beep-high-to-low.wav').default,
+  ballMiss: require('@/assets/mona-blocks/333785__aceofspadesproduc100__8-bit-failure-sound.wav').default,
+  ballLaunch: require('@/assets/mona-blocks/523702__postrobcore__quick-beep-high-to-low.wav').default,
+  wallHit: require('@/assets/mona-blocks/523702__postrobcore__quick-beep-high-to-low.wav').default,
+  gameStart: require('@/assets/mona-blocks/706744__kevp888__cd_contact_003fx_solar_flare.wav').default,
+  gameOver: null,
+  pause: null,
+  victory: null
+}
 
 export default {
   data () {
@@ -19,7 +28,6 @@ export default {
     }
   },
   mounted () {
-    const p5 = require('p5')
     // Ensure the container exists
     const container = document.getElementById('p5Canvas')
     if (!container) {
@@ -27,12 +35,19 @@ export default {
       return
     }
 
-    const sketchConfig = {
-      size: { width: container.clientWidth | 400, height: container.clientHeight || 600 },
-      imageUrl // Pass the resolved URL here
+    // Basic check if $p5 was injected (should be, as plugin is client-side)
+    if (!this.$p5) {
+      console.error('$p5 is not available. Check the p5.client.js plugin registration.')
+      return
     }
 
-    this.p5Instance = new p5((p) => { // eslint-disable-line new-cap
+    const sketchConfig = {
+      size: { width: container.clientWidth | 400, height: container.clientHeight || 600 },
+      imageUrl, // Pass the resolved URL here
+      soundUrls
+    }
+
+    this.p5Instance = new this.$p5((p) => {
       sketchConfig.p5Instance = p
       new MonaBlocksSketch(sketchConfig) // eslint-disable-line no-new
     }, container)
